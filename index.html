@@ -15,7 +15,24 @@
 <body>
 
 <!-- ============================================================
-     CURSOR (desktop only — auto-disabled on touch via script.js)
+     INTRO SPLASH — plays once on load, then reveals the site.
+     Auto-skips instantly if the video fails to load, and respects
+     "reduce motion" accessibility settings.
+============================================================ -->
+<div class="intro" id="intro">
+  <video
+    class="intro__video"
+    id="introVideo"
+    src="intro.mp4"
+    autoplay
+    muted
+    playsinline
+    aria-hidden="true"
+  ></video>
+  <button class="intro__skip mono" id="introSkip" aria-label="Skip intro">SKIP</button>
+</div>
+
+<!-- CURSOR (desktop only — auto-disabled on touch via script.js)
 ============================================================ -->
 <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
@@ -33,6 +50,7 @@
       <a href="#experience" class="nav__link">Experience</a>
       <a href="#projects" class="nav__link">Projects</a>
       <a href="#services" class="nav__link">Services</a>
+      <a href="#resume" class="nav__link">Resume</a>
       <a href="#contact" class="nav__link">Contact</a>
     </nav>
 
@@ -67,11 +85,8 @@
       </h1>
 
       <p class="hero__sub">
-        Motivated Computer Science undergraduate with knowledge of JAVA. Interested in Backend 
-        development. Passionate about how things work behind the curtains, 
-        keeping data safe, clean and making 
-        user-focused designs--actively building a strong portfolio for software 
-        engineering internships.
+        Computer Science undergraduate focused on backend engineering,
+        REST&nbsp;APIs, databases, and AI-driven software.
       </p>
 
       <div class="hero__identity">
@@ -106,7 +121,7 @@
     <div class="hero__portrait">
       <div class="hero__portrait-frame">
         <!-- EDIT: replace the placeholder below with <img src="your-photo.jpg" alt="Kaustubh Kushagra"> -->
-        <img src="kaustubh.jpg.jpg" alt="Kaustubh Kushagra">
+        <div class="hero__portrait-placeholder">
           <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="60" cy="45" r="22" stroke="currentColor" stroke-width="2"/>
             <path d="M20 105c4-22 20-33 40-33s36 11 40 33" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -355,11 +370,44 @@
 </section>
 
 <!-- ============================================================
+     RESUME
+============================================================ -->
+<section class="section section--alt" id="resume">
+  <div class="container">
+    <p class="eyebrow mono">08 — Resume</p>
+    <h2 class="section__title">Resume</h2>
+    <p class="section__intro">
+      View or download my latest resume below. This file updates the moment
+      I replace it — always the current version, no separate upload needed.
+    </p>
+
+    <div class="resume-block">
+      <div class="glass-card resume-embed-wrap">
+        <!-- object + fallback link: if a browser/device can't render the
+             embedded PDF (common on some mobile browsers), the fallback
+             text and link below still work. -->
+        <object data="resume.pdf" type="application/pdf" class="resume-embed">
+          <p class="resume-embed__fallback">
+            Your browser can't preview PDFs inline.
+            <a href="resume.pdf" target="_blank" rel="noopener">Open the resume directly</a> instead.
+          </p>
+        </object>
+      </div>
+
+      <div class="resume-actions">
+        <a href="resume.pdf" target="_blank" rel="noopener" class="btn btn--primary">View Resume</a>
+        <a href="resume.pdf" download class="btn btn--secondary">Download Resume</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
      CONTACT
 ============================================================ -->
-<section class="section section--alt" id="contact">
+<section class="section" id="contact">
   <div class="container">
-    <p class="eyebrow mono">08 — Contact</p>
+    <p class="eyebrow mono">09 — Contact</p>
     <h2 class="section__title">Have an idea worth building?</h2>
     <p class="section__intro">
       I'm always interested in learning, collaborating, building projects,
@@ -385,9 +433,10 @@
           <span class="contact__value">/kaustubh369-web</span>
         </a>
 
-        <!-- EDIT: replace # with your resume file link once ready -->
-        <a href="#" class="btn btn--secondary contact__resume-btn">
-          Download Resume <span class="mono">— Coming Soon</span>
+        <!-- EDIT: this points to resume.pdf in the same folder — replacing
+             that file (same filename) updates this link automatically -->
+        <a href="resume.pdf" download class="btn btn--secondary contact__resume-btn">
+          Download Resume
         </a>
       </div>
 

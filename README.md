@@ -11,6 +11,9 @@ open the files in any text editor and change them directly. Open
   list at the very top of the file)
 - `script.js` — interactions, plus the editable data for Skills,
   Experience, and Projects (see below)
+- `resume.pdf` — your resume, linked from both the Resume section and
+  the Contact section (see below)
+- `intro.mp4` — the video that plays once when the site first loads
 
 ## The three things you'll edit most often
 
@@ -78,3 +81,46 @@ Any static host works since there's no backend:
 Everything visual is controlled from the `:root { ... }` block at the
 very top of `style.css`. Change a hex value there and it updates
 everywhere that color is used — no need to hunt through the file.
+
+## Updating your resume
+
+The Resume section (and the "Download Resume" button in Contact) both
+link to a file called `resume.pdf` sitting in this same folder — they
+don't point to any specific version, just that filename.
+
+To update your resume, just **replace `resume.pdf` with your new file,
+keeping the exact same filename** (`resume.pdf`), then push it the
+same way you push any other change:
+```
+git add .
+git commit -m "Update resume"
+git push
+```
+No HTML or code changes needed — every link on the site automatically
+points at whatever `resume.pdf` currently contains.
+
+**Keep your resume's links clickable:** if you edit your resume in
+Word/Google Docs and re-export to PDF, links (email, LinkedIn, GitHub,
+portfolio) usually stay clickable automatically as long as you typed
+them as real links (not just plain text) in the original document.
+If you're ever unsure, open the exported PDF and click a link to
+confirm before pushing it live.
+
+## Changing or removing the intro video
+
+The splash video is `intro.mp4`, referenced in `index.html` inside
+the `<div class="intro">` block near the top of the file. To swap it,
+replace `intro.mp4` with a new file of the same name (same push steps
+as above). A few things to know:
+- It's muted and set to autoplay — browsers block autoplay-with-sound,
+  so keep any new video muted too, or the intro will just show a
+  frozen frame until the visitor unmutes it themselves.
+- It plays once, then fades into the homepage automatically when the
+  video ends — no fixed timer, so a longer or shorter video "just
+  works" without editing any code.
+- There's a small "SKIP" button in the corner the whole time, and a
+  5-second safety cutoff in `script.js` (`setupIntro` function) in
+  case a video ever fails to load — visitors are never stuck on a
+  blank screen.
+- To remove the intro entirely, delete the `<div class="intro">...
+  </div>` block from `index.html`.

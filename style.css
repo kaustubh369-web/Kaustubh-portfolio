@@ -91,6 +91,52 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* ============================================================
+   INTRO SPLASH
+============================================================ */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s var(--ease);
+}
+.intro.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.intro__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.intro__skip {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-primary);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.intro__skip:hover { border-color: var(--accent-cyan); background: rgba(0, 0, 0, 0.5); }
+
+/* While the intro is showing, keep the page beneath it from scrolling
+   or being reachable — it becomes normal again once .is-hidden is added
+   (see script.js), which also removes this class from body. */
+body.intro-active { overflow: hidden; height: 100vh; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro { display: none; } /* skip entirely — see also the JS check */
+}
+
+/* ============================================================
    CUSTOM CURSOR (desktop only)
 ============================================================ */
 .cursor-ring {
@@ -852,6 +898,31 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .form-field--hidden { position: absolute; left: -9999px; height: 0; overflow: hidden; }
 .contact-form__submit { margin-top: 8px; }
 .contact-form__status { font-size: 12px; min-height: 16px; color: var(--accent-cyan); }
+
+/* ============================================================
+   RESUME
+============================================================ */
+.resume-block { display: flex; flex-direction: column; gap: 24px; align-items: center; }
+.resume-embed-wrap {
+  width: 100%;
+  max-width: 680px;
+  aspect-ratio: 8.5 / 11;
+  padding: 0;
+  overflow: hidden;
+}
+.resume-embed { width: 100%; height: 100%; border: none; border-radius: var(--radius-lg); }
+.resume-embed__fallback {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.resume-embed__fallback a { color: var(--accent-cyan); text-decoration: underline; }
+.resume-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+@media (max-width: 680px) {
+  .resume-embed-wrap { display: none; } /* inline PDF preview is unreliable on many mobile browsers */
+}
 
 /* ============================================================
    FOOTER
