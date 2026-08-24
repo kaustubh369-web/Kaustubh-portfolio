@@ -5,26 +5,49 @@
 ============================================================ */
 
 const SKILLS = [
+  { 
+    category: "Language",
+    items: [
+      { name: "Java", desc: "A robust, object-oriented programming language." },
+      { name: "SQL", desc: "Structured Query Language for database management." },
+      {name : "JavaScript", desc: "A versatile language for web development and scripting."},
+    ]
+  },
   {
     category: "Backend Development",
     items: [
-      { name: "Node.js", desc: "Building server-side applications and APIs." },
+      { name: "Spring Boot", desc: "An open source java tool built on top of the spring framework , it helps to make ready-to-run web apps and microservices fast" },
       { name: "REST APIs", desc: "Designing and consuming structured web APIs." },
-      { name: "Java", desc: "Object-oriented programming for backend logic." },
+      { name: "JPA/Hibernate", desc: "Object-relational mapping for database interactions." },
     ],
   },
   {
     category: "Database",
     items: [
-      { name: "SQL", desc: "Querying and managing relational databases." },
+      { name: "mySQL", desc: "Querying and managing relational databases." },
+      { name: "MongoDB", desc: "Working with NoSQL document databases." },
+      { name: "PostgreSQL", desc: "Advanced relational database management." },
+      { name: "supabase", desc: "Open-source backend as a service for building applications." },
+      { name: "redis", desc: "In-memory data structure store for caching and messaging." },
       { name: "Database Design", desc: "Structuring schemas and data models." },
     ],
+  },
+  {
+    category: "core",
+    items: [
+      { name: "OOP", desc: "Object-oriented programming principles." },
+      { name: "Data Structures & Algorithms", desc: "Efficient problem-solving techniques." },
+      { name: "DBMS", desc: "Database management systems." },
+      {name: "JWT Authentication", desc: "JSON Web Tokens for secure authentication and authorization."},
+    ]
   },
   {
     category: "Tools & Soft Skills",
     items: [
       { name: "Git", desc: "Version control for tracking code changes." },
       { name: "GitHub", desc: "Collaborating and hosting project repositories." },
+      { name: "docker", desc: "Containerization for consistent development and deployment." },
+      {name: "postman", desc: "API testing and development tool."},
       { name: "Problem Solving", desc: "Breaking down and solving technical challenges." },
       { name: "Teamwork", desc: "Collaborating effectively in project teams." },
       { name: "Time Management", desc: "Balancing coursework, projects, and deadlines." },
