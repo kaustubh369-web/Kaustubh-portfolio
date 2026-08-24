@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaustubh Kushagra — Backend Developer &amp; Aspiring Software Engineer</title>
+<meta name="description" content="Portfolio of Kaustubh Kushagra — Computer Science undergraduate focused on backend engineering, REST APIs, databases, and AI-driven software.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     CURSOR (desktop only — auto-disabled on touch via script.js)
+============================================================ -->
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#home" class="nav__logo">KK<span class="nav__logo-dot">.</span></a>
+
+    <nav class="nav__links" id="navLinks">
+      <a href="#home" class="nav__link">Home</a>
+      <a href="#about" class="nav__link">About</a>
+      <a href="#skills" class="nav__link">Skills</a>
+      <a href="#experience" class="nav__link">Experience</a>
+      <a href="#projects" class="nav__link">Projects</a>
+      <a href="#services" class="nav__link">Services</a>
+      <a href="#contact" class="nav__link">Contact</a>
+    </nav>
+
+    <div class="nav__actions">
+      <a href="#contact" class="btn btn--ghost btn--sm">Contact Me</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section class="hero" id="home">
+  <div class="hero__mesh" aria-hidden="true"></div>
+  <div class="hero__grid" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <div class="hero__content">
+      <div class="badge badge--status">
+        <span class="badge__dot"></span>
+        <span class="mono">AVAILABLE FOR OPPORTUNITIES</span>
+      </div>
+
+      <h1 class="hero__headline">
+        Building intelligent<br>
+        software for the <span class="text-gradient">future.</span>
+      </h1>
+
+      <p class="hero__sub">
+        Computer Science undergraduate focused on backend engineering,
+        REST&nbsp;APIs, databases, and AI-driven software.
+      </p>
+
+      <div class="hero__identity">
+        <span class="hero__name">Kaustubh Kushagra</span>
+        <span class="hero__role">Computer Science Undergraduate · Backend Developer · Aspiring Software Engineer</span>
+      </div>
+
+      <p class="hero__desc">
+        I enjoy building backend systems, working with databases and APIs,
+        experimenting with AI-driven applications, and solving real-world
+        problems through software.
+      </p>
+
+      <div class="hero__cta">
+        <a href="#projects" class="btn btn--primary">View My Projects</a>
+        <a href="#contact" class="btn btn--secondary">Let's Connect</a>
+      </div>
+
+      <div class="hero__socials">
+        <a href="https://github.com/kaustubh369-web" target="_blank" rel="noopener" class="social-icon" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.03 11.03 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5Z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/kaustubh-kush" target="_blank" rel="noopener" class="social-icon" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0Z"/></svg>
+        </a>
+        <a href="mailto:kaustubhkushagra91@gmail.com" class="social-icon" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 4h20a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm19 3.24-8.53 6.14a1 1 0 0 1-1.17 0L3 7.24V18h18V7.24ZM3.4 5l8.6 6.19L20.6 5H3.4Z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__portrait">
+      <div class="hero__portrait-frame">
+        <!-- EDIT: replace the placeholder below with <img src="your-photo.jpg" alt="Kaustubh Kushagra"> -->
+        <div class="hero__portrait-placeholder">
+          <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="45" r="22" stroke="currentColor" stroke-width="2"/>
+            <path d="M20 105c4-22 20-33 40-33s36 11 40 33" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="mono hero__portrait-label">ADD PHOTO</span>
+        </div>
+      </div>
+      <div class="hero__portrait-ring" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="hero__scroll-hint mono" aria-hidden="true">SCROLL<span class="hero__scroll-line"></span></div>
+</section>
+
+<!-- ============================================================
+     ABOUT
+============================================================ -->
+<section class="section" id="about">
+  <div class="container">
+    <p class="eyebrow mono">01 — About</p>
+    <h2 class="section__title">Who I am</h2>
+
+    <div class="about__grid">
+      <p class="about__text">
+        Motivated Computer Science undergraduate with hands-on experience
+        building and managing backend systems and databases using Node.js,
+        Java, SQL, and REST&nbsp;APIs. Passionate about full-stack development,
+        software engineering, and clean, user-focused design — actively
+        building a strong portfolio for software engineering internships.
+      </p>
+
+      <div class="focus-list">
+        <span class="focus-list__item">Backend Development</span>
+        <span class="focus-list__item">Database Engineering</span>
+        <span class="focus-list__item">REST API Development</span>
+        <span class="focus-list__item">Software Engineering</span>
+        <span class="focus-list__item">AI-driven Applications</span>
+        <span class="focus-list__item">Full-Stack Development</span>
+      </div>
+
+      <div class="glass-card profile-card">
+        <div class="profile-card__row">
+          <span class="mono profile-card__label">STATUS</span>
+          <span class="profile-card__value">B.Tech Computer Science Student</span>
+        </div>
+        <div class="profile-card__row">
+          <span class="mono profile-card__label">GRADUATION</span>
+          <span class="profile-card__value">2029</span>
+        </div>
+        <div class="profile-card__row">
+          <span class="mono profile-card__label">FOCUS</span>
+          <span class="profile-card__value">Backend + AI + Software Engineering</span>
+        </div>
+        <div class="profile-card__row">
+          <span class="mono profile-card__label">EXPERIENCE</span>
+          <span class="profile-card__value">Hackathons &amp; Project Development</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EDUCATION
+============================================================ -->
+<section class="section section--alt" id="education">
+  <div class="container">
+    <p class="eyebrow mono">02 — Education</p>
+    <h2 class="section__title">Academic background</h2>
+
+    <div class="timeline">
+      <div class="timeline__line" aria-hidden="true"></div>
+      <div class="timeline__item">
+        <div class="timeline__node" aria-hidden="true"></div>
+        <div class="glass-card timeline__card">
+          <span class="mono timeline__tag">Expected Graduation: 2029</span>
+          <h3 class="timeline__degree">B.Tech, Computer Science</h3>
+          <p class="timeline__org">Institute of Technical Education and Research</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SKILLS
+============================================================ -->
+<section class="section" id="skills">
+  <div class="container">
+    <p class="eyebrow mono">03 — Skills</p>
+    <h2 class="section__title">What I work with</h2>
+    <p class="section__intro">
+      Early-career developer building practical, hands-on experience — not
+      claiming mastery, but putting in the reps.
+    </p>
+
+    <div class="skills" id="skillsGrid"><!-- populated by script.js --></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EXPERIENCE / HACKATHONS
+============================================================ -->
+<section class="section section--alt" id="experience">
+  <div class="container">
+    <p class="eyebrow mono">04 — Experience</p>
+    <h2 class="section__title">Experience &amp; Hackathons</h2>
+    <p class="section__intro">
+      This section will grow as I take on internships, freelance work, and
+      more hackathons — here's what I've built so far.
+    </p>
+
+    <div class="exp-list" id="expList"><!-- populated by script.js --></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROJECTS
+============================================================ -->
+<section class="section" id="projects">
+  <div class="container">
+    <p class="eyebrow mono">05 — Projects</p>
+    <h2 class="section__title">Featured work</h2>
+
+    <!-- Featured project — rendered directly (not from the grid loop) so it
+         can be the large showcase card described in the brief -->
+    <article class="feature-project glass-card">
+      <div class="feature-project__header">
+        <span class="badge badge--outline mono">FEATURED PROJECT</span>
+        <h3 class="feature-project__title">AI Operation Controller</h3>
+        <p class="feature-project__desc">
+          A working prototype of a human-governed AIOps platform that
+          correlates simulated campus infrastructure signals, diagnoses root
+          causes, recommends risk-ranked fixes, previews proposed actions in
+          a sandbox, requires human approval before execution, and maintains
+          a complete audit trail. The system also demonstrates graceful
+          degradation when data sources become unavailable.
+        </p>
+      </div>
+
+      <div class="feature-project__capabilities">
+        <div class="capability">
+          <span class="capability__title">Signal Correlation</span>
+          <span class="capability__desc">Correlates simulated infrastructure signals from campus systems.</span>
+        </div>
+        <div class="capability">
+          <span class="capability__title">Root Cause Diagnosis</span>
+          <span class="capability__desc">Identifies potential causes behind infrastructure problems.</span>
+        </div>
+        <div class="capability">
+          <span class="capability__title">Risk-Ranked Recommendations</span>
+          <span class="capability__desc">Suggests potential fixes while ranking them based on risk.</span>
+        </div>
+        <div class="capability">
+          <span class="capability__title">Human Approval</span>
+          <span class="capability__desc">Ensures potentially impactful actions require human approval.</span>
+        </div>
+        <div class="capability">
+          <span class="capability__title">Sandbox Preview</span>
+          <span class="capability__desc">Allows proposed changes to be previewed before execution.</span>
+        </div>
+        <div class="capability">
+          <span class="capability__title">Audit Trail</span>
+          <span class="capability__desc">Logs actions and decisions for accountability.</span>
+        </div>
+        <div class="capability">
+          <span class="capability__title">Graceful Degradation</span>
+          <span class="capability__desc">Demonstrates how the system behaves when data sources go offline.</span>
+        </div>
+      </div>
+
+      <div class="feature-project__footer">
+        <div class="tech-tags">
+          <span class="tech-tag mono">Python</span>
+          <span class="tech-tag mono">Database</span>
+          <span class="tech-tag mono">REST API</span>
+          <span class="tech-tag mono">Backend Development</span>
+          <span class="tech-tag mono">AI / AIOps</span>
+        </div>
+        <div class="feature-project__links">
+          <!-- EDIT: replace # with your live demo link once deployed -->
+          <a href="#" class="btn btn--primary btn--sm">View Project</a>
+          <a href="https://github.com/kaustubh369-web/AI-operations-Controller" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View GitHub</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- More projects — data-driven grid, see script.js PROJECTS array -->
+    <div class="projects-more">
+      <h3 class="projects-more__title mono">MORE PROJECTS</h3>
+      <div class="project-grid" id="projectGrid"><!-- populated by script.js --></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVICES
+============================================================ -->
+<section class="section section--alt" id="services">
+  <div class="container">
+    <p class="eyebrow mono">06 — Services</p>
+    <h2 class="section__title">What I can build</h2>
+
+    <div class="services-grid">
+      <div class="glass-card service-card">
+        <h3 class="service-card__title">REST API Development</h3>
+        <p class="service-card__desc">Building structured REST APIs for web applications and backend systems.</p>
+      </div>
+      <div class="glass-card service-card">
+        <h3 class="service-card__title">Backend Development</h3>
+        <p class="service-card__desc">Developing backend functionality using technologies such as Node.js and Java.</p>
+      </div>
+      <div class="glass-card service-card">
+        <h3 class="service-card__title">Database Design</h3>
+        <p class="service-card__desc">Designing structured databases and data models for applications.</p>
+      </div>
+      <div class="glass-card service-card">
+        <h3 class="service-card__title">Prototype Development</h3>
+        <p class="service-card__desc">Building functional prototypes for hackathons, academic projects, and early-stage ideas.</p>
+      </div>
+    </div>
+
+    <p class="services__note">Services and capabilities will expand as I gain more professional experience.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     CURRENTLY LEARNING / FUTURE GOALS
+============================================================ -->
+<section class="section" id="future">
+  <div class="container">
+    <p class="eyebrow mono">07 — Roadmap</p>
+    <h2 class="section__title">Currently building. Constantly learning.</h2>
+
+    <div class="roadmap">
+      <div class="roadmap__track" aria-hidden="true"></div>
+      <div class="roadmap__item"><span class="roadmap__dot"></span><span>Software Engineering Internships</span></div>
+      <div class="roadmap__item"><span class="roadmap__dot"></span><span>Full-Stack Development</span></div>
+      <div class="roadmap__item"><span class="roadmap__dot"></span><span>More Advanced Backend Engineering</span></div>
+      <div class="roadmap__item"><span class="roadmap__dot"></span><span>AI-powered Software</span></div>
+      <div class="roadmap__item"><span class="roadmap__dot"></span><span>More Hackathons</span></div>
+      <div class="roadmap__item"><span class="roadmap__dot"></span><span>Freelance Development</span></div>
+      <div class="roadmap__item"><span class="roadmap__dot"></span><span>Real-world Software Projects</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section class="section section--alt" id="contact">
+  <div class="container">
+    <p class="eyebrow mono">08 — Contact</p>
+    <h2 class="section__title">Have an idea worth building?</h2>
+    <p class="section__intro">
+      I'm always interested in learning, collaborating, building projects,
+      and exploring new opportunities.
+    </p>
+
+    <div class="contact__grid">
+      <div class="contact__info">
+        <a href="mailto:kaustubhkushagra91@gmail.com" class="contact__row">
+          <span class="mono contact__label">EMAIL</span>
+          <span class="contact__value">kaustubhkushagra91@gmail.com</span>
+        </a>
+        <a href="tel:+917004418211" class="contact__row">
+          <span class="mono contact__label">PHONE</span>
+          <span class="contact__value">+91 7004418211</span>
+        </a>
+        <a href="https://www.linkedin.com/in/kaustubh-kush" target="_blank" rel="noopener" class="contact__row">
+          <span class="mono contact__label">LINKEDIN</span>
+          <span class="contact__value">/in/kaustubh-kush</span>
+        </a>
+        <a href="https://github.com/kaustubh369-web" target="_blank" rel="noopener" class="contact__row">
+          <span class="mono contact__label">GITHUB</span>
+          <span class="contact__value">/kaustubh369-web</span>
+        </a>
+
+        <!-- EDIT: replace # with your resume file link once ready -->
+        <a href="#" class="btn btn--secondary contact__resume-btn">
+          Download Resume <span class="mono">— Coming Soon</span>
+        </a>
+      </div>
+
+      <form class="glass-card contact-form" id="contactForm" novalidate>
+        <div class="form-field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required autocomplete="name">
+        </div>
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+        <div class="form-field">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" required>
+        </div>
+        <div class="form-field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <!-- honeypot field for basic spam protection — kept hidden from real users -->
+        <div class="form-field form-field--hidden" aria-hidden="true">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button type="submit" class="btn btn--primary contact-form__submit">Send Message</button>
+        <p class="contact-form__status mono" id="formStatus" role="status"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <span class="mono footer__brand">KAUSTUBH KUSHAGRA</span>
+    <span class="footer__copy">Built with intent. © <span id="year"></span></span>
+    <div class="footer__socials">
+      <a href="https://github.com/kaustubh369-web" target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
+      <a href="https://www.linkedin.com/in/kaustubh-kush" target="_blank" rel="noopener" aria-label="LinkedIn">LinkedIn</a>
+      <a href="mailto:kaustubhkushagra91@gmail.com" aria-label="Email">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
