@@ -1,10 +1,23 @@
 /* ============================================================
-   CONTENT DATA
-   Edit these arrays to add/change Skills, Experience, and Projects
-   without touching any HTML or layout code.
+   SUPABASE CONNECTION
+   Fill these in once you've created your Supabase project:
+   Dashboard → Project Settings → API → "Project URL" and "anon public" key.
+   The anon key is SAFE to put here — it's a public, read-only key by
+   design (the SQL schema locks it to read-only via Row Level Security).
+   Never put your "service_role" key here — that one is truly secret.
+============================================================ */
+const SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co"; // EDIT ME
+const SUPABASE_ANON_KEY = "YOUR-ANON-PUBLIC-KEY"; // EDIT ME
+
+/* ============================================================
+   CONTENT DATA — FALLBACK DEFAULTS
+   These are used if Supabase isn't configured yet, or if a fetch
+   ever fails (offline, Supabase down, etc.) — the site always has
+   something to show. Once Supabase is set up, live data from your
+   database silently replaces these on every page load.
 ============================================================ */
 
-const SKILLS = [
+const DEFAULT_SKILLS = [
   {
     category: "Backend Development",
     items: [
@@ -32,7 +45,7 @@ const SKILLS = [
   },
 ];
 
-const EXPERIENCE = [
+const DEFAULT_EXPERIENCE = [
   {
     title: "SOA Ideathon 2026 — Smart India Hackathon Preparation",
     role: "Backend / Database & Prototype Development",
@@ -54,7 +67,7 @@ const EXPERIENCE = [
 // The AI Operation Controller is rendered separately in index.html as the
 // large featured showcase card. This array is for everything ELSE —
 // add a new project any time by adding an object here.
-const PROJECTS = [
+const DEFAULT_PROJECTS = [
   // Example of how to add a project once you have one ready:
   // {
   //   name: "Project Name",
@@ -67,12 +80,14 @@ const PROJECTS = [
 
 /* ============================================================
    RENDER: Skills
+   `skillGroups` shape: [{ category, items: [{name, desc}] }]
 ============================================================ */
-function renderSkills() {
+function renderSkills(skillGroups) {
   const grid = document.getElementById("skillsGrid");
   if (!grid) return;
+  grid.innerHTML = ""; // clear before re-render (safe to call more than once)
 
-  SKILLS.forEach((group) => {
+  skillGroups.forEach((group) => {
     const col = document.createElement("div");
     col.className = "skills__col reveal";
 
@@ -97,12 +112,14 @@ function renderSkills() {
 
 /* ============================================================
    RENDER: Experience
+   `experienceList` shape: [{title, role, tag, desc, points: [...]}]
 ============================================================ */
-function renderExperience() {
+function renderExperience(experienceList) {
   const list = document.getElementById("expList");
   if (!list) return;
+  list.innerHTML = "";
 
-  EXPERIENCE.forEach((exp) => {
+  experienceList.forEach((exp) => {
     const card = document.createElement("article");
     card.className = "glass-card exp-card reveal";
     card.innerHTML = `
@@ -124,12 +141,14 @@ function renderExperience() {
 
 /* ============================================================
    RENDER: Projects grid ("more projects")
+   `projectList` shape: [{name, desc, tags: [...], github, demo}]
 ============================================================ */
-function renderProjects() {
+function renderProjects(projectList) {
   const grid = document.getElementById("projectGrid");
   if (!grid) return;
+  grid.innerHTML = "";
 
-  if (PROJECTS.length === 0) {
+  if (projectList.length === 0) {
     grid.innerHTML = `
       <div class="glass-card project-card project-card--empty">
         <span class="mono" style="font-size:12px;">MORE PROJECTS COMING SOON</span>
@@ -139,7 +158,7 @@ function renderProjects() {
     return;
   }
 
-  PROJECTS.forEach((p) => {
+  projectList.forEach((p) => {
     const card = document.createElement("div");
     card.className = "glass-card project-card reveal";
     card.innerHTML = `
@@ -190,6 +209,93 @@ function setupIntro() {
   setTimeout(dismiss, 5000);
 
   skipBtn.addEventListener("click", dismiss);
+}
+
+/* ============================================================
+   SUPABASE: load live content, falling back to defaults on any
+   failure (not configured yet, offline, Supabase down, etc.)
+============================================================ */
+function isSupabaseConfigured() {
+  return (
+    SUPABASE_URL &&
+    !SUPABASE_URL.includes("YOUR-PROJECT-REF") &&
+    SUPABASE_ANON_KEY &&
+    !SUPABASE_ANON_KEY.includes("YOUR-ANON")
+  );
+}
+
+async function fetchTable(table, orderColumn = "sort_order") {
+  const url = `${SUPABASE_URL}/rest/v1/${table}?select=*&order=${orderColumn}.asc`;
+  const res = await fetch(url, {
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+  });
+  if (!res.ok) throw new Error(`Failed to fetch ${table}: ${res.status}`);
+  return res.json();
+}
+
+// Supabase gives us flat rows; the Skills UI needs them grouped by
+// category — this reshapes [{category, name, description}, ...]
+// into [{category, items: [{name, desc}]}, ...] in the order they arrive.
+function groupSkillsByCategory(rows) {
+  const groups = [];
+  const index = new Map();
+  rows.forEach((row) => {
+    if (!index.has(row.category)) {
+      index.set(row.category, { category: row.category, items: [] });
+      groups.push(index.get(row.category));
+    }
+    index.get(row.category).items.push({ name: row.name, desc: row.description });
+  });
+  return groups;
+}
+
+function mapExperienceRows(rows) {
+  return rows.map((row) => ({
+    title: row.title,
+    role: row.role,
+    tag: row.tag,
+    desc: row.description,
+    points: row.points || [],
+  }));
+}
+
+function mapProjectRows(rows) {
+  return rows.map((row) => ({
+    name: row.name,
+    desc: row.description,
+    tags: row.tags || [],
+    github: row.github_url,
+    demo: row.demo_url,
+  }));
+}
+
+async function loadContent() {
+  // Always render defaults immediately so the page is never empty
+  // while we wait on a network request.
+  renderSkills(DEFAULT_SKILLS);
+  renderExperience(DEFAULT_EXPERIENCE);
+  renderProjects(DEFAULT_PROJECTS);
+
+  if (!isSupabaseConfigured()) return; // running on defaults only — that's fine
+
+  try {
+    const [skillRows, experienceRows, projectRows] = await Promise.all([
+      fetchTable("skills"),
+      fetchTable("experience"),
+      fetchTable("projects"),
+    ]);
+    renderSkills(groupSkillsByCategory(skillRows));
+    renderExperience(mapExperienceRows(experienceRows));
+    renderProjects(mapProjectRows(projectRows));
+    setupScrollReveal(); // re-tag freshly-inserted cards for the reveal animation
+  } catch (err) {
+    // Fetch failed (offline, Supabase paused, etc.) — defaults are
+    // already showing, so the visitor never sees a broken page.
+    console.warn("Could not load live content from Supabase, showing defaults:", err);
+  }
 }
 
 /* ============================================================
@@ -349,9 +455,7 @@ function setupFooterYear() {
 ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
   setupIntro();
-  renderSkills();
-  renderExperience();
-  renderProjects();
+  loadContent();
   setupNav();
   setupScrollReveal();
   setupCursor();
