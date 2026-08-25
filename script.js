@@ -19,30 +19,56 @@ const SUPABASE_ANON_KEY = "YOUR-ANON-PUBLIC-KEY"; // EDIT ME
 
 const DEFAULT_SKILLS = [
   {
-    category: "Backend Development",
+    category: "Language",
     items: [
-      { name: "Node.js", desc: "Building server-side applications and APIs." },
-      { name: "REST APIs", desc: "Designing and consuming structured web APIs." },
-      { name: "Java", desc: "Object-oriented programming for backend logic." },
-    ],
-  },
-  {
-    category: "Database",
-    items: [
+      { name: "JavaScript", desc: "Building interactive web applications." },
       { name: "SQL", desc: "Querying and managing relational databases." },
-      { name: "Database Design", desc: "Structuring schemas and data models." },
+      { name: "Java", desc: "Object-oriented programming for backend logic." },
+      { name: "Python", desc: "Scripting, data analysis, and backend development." },
+      { name: "HTML & CSS", desc: "Structuring and styling web pages." },
+      
     ],
   },
   {
-    category: "Tools & Core Skills",
+    category: "Frameworks",
     items: [
-      { name: "Git", desc: "Version control for tracking code changes." },
-      { name: "GitHub", desc: "Collaborating and hosting project repositories." },
-      { name: "Problem Solving", desc: "Breaking down and solving technical challenges." },
-      { name: "Teamwork", desc: "Collaborating effectively in project teams." },
-      { name: "Time Management", desc: "Balancing coursework, projects, and deadlines." },
+      { name: "Spring Boot", desc: "Building scalable backend applications." },
+      { name: "JPA/Hibernate", desc: "Object-relational mapping for Java applications." },
     ],
   },
+  {
+    category: "Databases",
+    items: [
+      { name: "MySQL", desc: "Managing relational databases." },
+      { name: "PostgreSQL", desc: "Advanced relational database management." },
+      { name: "MongoDB", desc: "NoSQL document database management." },
+      { name: "Supabase", desc: "Backend as a service with PostgreSQL." },
+      { name: "Redis", desc: "In-memory data structure store for caching and messaging." },
+    ],
+  },
+  {
+    category: "Tools & Platforms",
+    items: [
+      { name: "Git & GitHub", desc: "Version control and collaboration." },
+      { name: "Docker", desc: "Containerization for consistent environments." },
+      { name: "Postman", desc: "API testing and development." },
+      { name: "VS Code", desc: "Code editor for development." },
+      { name: "claude.ai", desc: "AI-powered coding assistant." },
+      { name: "AI TOOLS", desc: "Leveraging AI for development and problem-solving." },
+    ],
+  },
+  { 
+    category: "Other Skills & Core",
+    items: [
+      { name: "REST API Development", desc: "Designing and implementing RESTful APIs." },
+      { name: "Database Design", desc: "Structuring databases for efficiency and scalability." },
+      {name : "DSA", desc: "Understanding data structures and algorithms for efficient coding."},
+      {name : "OOP", desc: "Applying object-oriented programming principles."},
+      { name: "DBMS", desc: "Database management systems for data storage and retrieval." },
+      { name: "Problem Solving", desc: "Analyzing and solving complex problems." }
+      { name: "Team Collaboration", desc: "Working effectively in team environments." },
+    ],
+  }
 ];
 
 const DEFAULT_EXPERIENCE = [
