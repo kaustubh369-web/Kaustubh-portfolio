@@ -1083,3 +1083,87 @@ body.intro-active { overflow: hidden; height: 100vh; }
   .back-to-top { bottom: 20px; right: 20px; width: 40px; height: 40px; }
   .copy-toast { bottom: 20px; }
 }
+
+/* ============================================================
+   COSMIC BACKGROUND: starfield + shooting stars
+============================================================ */
+.cosmic-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none; /* never blocks clicks on real content */
+}
+
+/* Three layered star fields at different sizes/opacities for a subtle
+   sense of depth. Pure background-image (radial-gradient dots, tiled)
+   — a single paint, not per-star DOM nodes, so this is essentially
+   free performance-wise no matter how "dense" it looks. */
+.cosmic-bg__stars {
+  position: absolute;
+  inset: -10%;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20px 30px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 90px 120px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 160px 60px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 230px 180px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1.5px 1.5px at 300px 40px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 40px 200px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 340px 220px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 130px 260px, rgba(255,255,255,0.6), transparent);
+  background-repeat: repeat;
+  background-size: 380px 300px;
+  opacity: 0.78; /* static — no ongoing animation cost; only the shooting stars move */
+}
+
+/* Shooting star: a short glowing streak that crosses part of the
+   screen, fades out, then waits (most of each animation cycle is
+   invisible) before doing it again — reads as occasional, not
+   mechanical. Only `transform` and `opacity` change, so this runs on
+   the compositor thread and stays smooth even while scrolling. */
+.shooting-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 4px 1px rgba(255,255,255,0.8);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation-name: shootingStar;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+.shooting-star::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 160px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.85), transparent);
+  transform: translateY(-50%);
+}
+@keyframes shootingStar {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  4%   { opacity: 1; }
+  16%  { transform: translate(-420px, 300px); opacity: 0; }
+  100% { transform: translate(-420px, 300px); opacity: 0; } /* stays invisible for the rest of the cycle */
+}
+
+/* Respect prefers-reduced-motion: keep the starfield but freeze the
+   twinkle and hide the moving shooting stars entirely. */
+.cosmic-bg--static .cosmic-bg__stars { animation: none; opacity: 0.6; }
+.cosmic-bg--static .shooting-star { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cosmic-bg__stars { animation: none; opacity: 0.6; }
+  .shooting-star { display: none; }
+}
+
+/* Let the starfield subtly show through the solid-colored alternating
+   sections too, not just the transparent ones — a very small opacity
+   change (5%), imperceptible to text contrast/readability, so this
+   stays "clean" rather than distracting. This overrides only the
+   background of .section--alt; every other rule for it is untouched. */
+.section--alt { background: rgba(18, 19, 28, 0.95); }

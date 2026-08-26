@@ -775,6 +775,51 @@ function setupImageFadeIn() {
 }
 
 /* ============================================================
+   COSMIC BACKGROUND: starfield + shooting stars
+   ------------------------------------------------------------
+   Pure CSS animation (transform + opacity only, both GPU-composited)
+   — no per-frame JavaScript, no layout/reflow cost, so this stays
+   smooth even on modest hardware. JS only creates the DOM elements
+   once at page load; the browser's compositor handles everything
+   else after that.
+============================================================ */
+function setupCosmicBackground() {
+  const container = document.createElement("div");
+  container.className = "cosmic-bg";
+  container.setAttribute("aria-hidden", "true");
+
+  const stars = document.createElement("div");
+  stars.className = "cosmic-bg__stars";
+  container.appendChild(stars);
+
+  // A handful of shooting stars, each with its own random-ish delay,
+  // duration, and starting position so they don't all fire in sync —
+  // reads as natural rather than mechanical.
+  const STAR_COUNT = 4;
+  for (let i = 0; i < STAR_COUNT; i++) {
+    const star = document.createElement("span");
+    star.className = "shooting-star";
+    const topStart = Math.random() * 40; // starts somewhere in the upper 40% of the screen
+    const leftStart = Math.random() * 70;
+    const duration = 6 + Math.random() * 5; // 6–11s full cycle
+    const delay = Math.random() * 10; // staggered start
+    star.style.top = `${topStart}%`;
+    star.style.left = `${leftStart}%`;
+    star.style.animationDuration = `${duration}s`;
+    star.style.animationDelay = `${delay}s`;
+    container.appendChild(star);
+  }
+
+  document.body.prepend(container);
+
+  // Respect visitors who've asked their OS/browser to reduce motion —
+  // same courtesy already given to the intro splash.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    container.classList.add("cosmic-bg--static");
+  }
+}
+
+/* ============================================================
    INIT — original startup sequence (unchanged in effect: same
    functions, same order — now wrapped in safeRun so that if any
    one of them throws, the rest still run instead of the whole
@@ -802,4 +847,5 @@ document.addEventListener("DOMContentLoaded", () => {
   safeRun(setupEscapeCloses, "setupEscapeCloses");
   safeRun(setupInlineFormValidation, "setupInlineFormValidation");
   safeRun(setupImageFadeIn, "setupImageFadeIn");
+  safeRun(setupCosmicBackground, "setupCosmicBackground");
 });
