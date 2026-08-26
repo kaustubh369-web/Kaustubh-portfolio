@@ -477,14 +477,329 @@ function setupFooterYear() {
 }
 
 /* ============================================================
-   INIT
+   RELIABILITY: safe init wrapper + global error resilience
+   ------------------------------------------------------------
+   Nothing above this line is touched. From here down is all NEW
+   code — reliability and functionality additions layered on top
+   of the existing site, none of it replacing what already works.
+============================================================ */
+
+// Runs a setup function in isolation: if one feature throws, the
+// rest of the page keeps working instead of the whole script
+// silently dying (which is exactly what happened before — one
+// syntax/runtime error anywhere used to take down everything after
+// it, including the intro splash and the Supabase content loading).
+function safeRun(fn, label) {
+  try {
+    fn();
+  } catch (err) {
+    console.error(`[reliability] "${label}" failed — other features are unaffected:`, err);
+  }
+}
+
+// Catches any otherwise-unhandled runtime error or rejected promise
+// anywhere on the page and logs it clearly, instead of letting it
+// fail silently or crash something unrelated.
+window.addEventListener("error", (e) => {
+  console.error("[reliability] Uncaught error:", e.error || e.message);
+});
+window.addEventListener("unhandledrejection", (e) => {
+  console.error("[reliability] Unhandled promise rejection:", e.reason);
+});
+
+/* ============================================================
+   RELIABILITY: make the existing Supabase fetch resilient
+   ------------------------------------------------------------
+   This wraps the ORIGINAL fetchTable and loadContent functions
+   defined above — their own code is not changed at all. Wrapping
+   adds a timeout, one automatic retry, and a localStorage cache
+   layer entirely from the outside.
+============================================================ */
+
+// A fetch that hangs (slow network, Supabase briefly unresponsive)
+// used to be able to hang indefinitely. This makes any single
+// attempt give up after 8 seconds so the page never gets stuck
+// waiting — the existing fallback-to-defaults behavior still kicks
+// in exactly as before if every attempt fails.
+function withTimeout(promise, ms) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), ms)),
+  ]);
+}
+
+const _rawFetchTable = fetchTable;
+fetchTable = async function (table, orderColumn = "sort_order") {
+  try {
+    return await withTimeout(_rawFetchTable(table, orderColumn), 8000);
+  } catch (firstErr) {
+    console.warn(`[reliability] "${table}" fetch failed once (${firstErr.message}) — retrying...`);
+    return await withTimeout(_rawFetchTable(table, orderColumn), 8000);
+  }
+};
+
+// localStorage cache: lets the site show your last-known-good
+// content instantly on repeat visits (before the network reply
+// even arrives), and keeps showing it if a visitor is offline or
+// Supabase is briefly down — layered on top of, not replacing, the
+// existing hardcoded DEFAULT_* fallback.
+const CONTENT_CACHE_KEY = "kk_portfolio_content_cache_v1";
+const CONTENT_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+function getCachedContent() {
+  try {
+    const raw = localStorage.getItem(CONTENT_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Date.now() - parsed.timestamp > CONTENT_CACHE_MAX_AGE_MS) return null;
+    return parsed.data;
+  } catch (err) {
+    return null; // localStorage unavailable (private browsing, quota full, etc.) — non-fatal
+  }
+}
+
+function setCachedContent(data) {
+  try {
+    localStorage.setItem(CONTENT_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data }));
+  } catch (err) {
+    // non-fatal — caching is a nice-to-have, never a requirement
+  }
+}
+
+function renderFromCacheIfAvailable() {
+  const cached = getCachedContent();
+  if (!cached) return;
+  if (cached.skills) renderSkills(cached.skills);
+  if (cached.experience) renderExperience(cached.experience);
+  if (cached.projects) renderProjects(cached.projects);
+}
+
+// Refreshes the cache in the background AFTER the page has already
+// shown content — never blocks anything the visitor sees.
+async function refreshContentCache() {
+  if (!isSupabaseConfigured()) return;
+  try {
+    const [skillRows, experienceRows, projectRows] = await Promise.all([
+      fetchTable("skills"),
+      fetchTable("experience"),
+      fetchTable("projects"),
+    ]);
+    setCachedContent({
+      skills: groupSkillsByCategory(skillRows),
+      experience: mapExperienceRows(experienceRows),
+      projects: mapProjectRows(projectRows),
+    });
+  } catch (err) {
+    console.warn("[reliability] Background cache refresh failed — existing content stays as-is:", err);
+  }
+}
+
+const _originalLoadContent = loadContent;
+loadContent = async function () {
+  renderFromCacheIfAvailable(); // instant paint from last visit, if any, before the network reply lands
+  await _originalLoadContent(); // completely unmodified: defaults → live fetch → render, same as before
+  refreshContentCache(); // fire-and-forget — updates the cache for next time, doesn't block anything now
+};
+
+/* ============================================================
+   NETWORK STATUS BANNER
+   Tells the visitor plainly when they've lost connectivity,
+   instead of content just silently failing to update.
+============================================================ */
+function setupNetworkStatus() {
+  const banner = document.createElement("div");
+  banner.id = "networkBanner";
+  banner.className = "network-banner mono";
+  banner.textContent = "You're offline — showing the last loaded version of this page.";
+  document.body.appendChild(banner);
+
+  function update() {
+    banner.classList.toggle("is-visible", !navigator.onLine);
+  }
+  window.addEventListener("online", update);
+  window.addEventListener("offline", update);
+  update();
+}
+
+/* ============================================================
+   BACK TO TOP BUTTON
+============================================================ */
+function setupBackToTop() {
+  const btn = document.createElement("button");
+  btn.id = "backToTop";
+  btn.className = "back-to-top";
+  btn.setAttribute("aria-label", "Back to top");
+  btn.innerHTML = "↑";
+  document.body.appendChild(btn);
+
+  window.addEventListener("scroll", () => {
+    btn.classList.toggle("is-visible", window.scrollY > 600);
+  });
+
+  btn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+============================================================ */
+function setupScrollProgress() {
+  const bar = document.createElement("div");
+  bar.id = "scrollProgress";
+  bar.className = "scroll-progress";
+  document.body.appendChild(bar);
+
+  window.addEventListener("scroll", () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    bar.style.width = `${pct}%`;
+  });
+}
+
+/* ============================================================
+   CLICK-TO-COPY CONTACT INFO
+   Targets the existing .contact__row / .contact__value elements
+   by class — no HTML changes needed to wire this up.
+============================================================ */
+function setupCopyToClipboard() {
+  const rows = document.querySelectorAll(".contact__row");
+  if (!rows.length) return;
+
+  const toast = document.createElement("div");
+  toast.id = "copyToast";
+  toast.className = "copy-toast mono";
+  toast.textContent = "Copied!";
+  document.body.appendChild(toast);
+
+  let toastTimer = null;
+  function showToast(text) {
+    toast.textContent = text;
+    toast.classList.add("is-visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1600);
+  }
+
+  rows.forEach((row) => {
+    // only intercept copyable info (email/phone) — leave real links
+    // (LinkedIn, GitHub) to navigate normally
+    const label = row.querySelector(".contact__label")?.textContent || "";
+    const isCopyable = /EMAIL|PHONE/i.test(label);
+    if (!isCopyable) return;
+
+    row.addEventListener("click", (e) => {
+      const value = row.querySelector(".contact__value")?.textContent?.trim();
+      if (!value || !navigator.clipboard) return;
+      e.preventDefault();
+      navigator.clipboard
+        .writeText(value)
+        .then(() => showToast(`Copied "${value}"`))
+        .catch(() => {}); // clipboard permission denied — fail silently, link still works normally otherwise
+    });
+  });
+}
+
+/* ============================================================
+   KEYBOARD: Escape closes the mobile nav menu
+============================================================ */
+function setupEscapeCloses() {
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    const links = document.getElementById("navLinks");
+    const toggle = document.getElementById("navToggle");
+    if (links && links.classList.contains("is-open")) {
+      links.classList.remove("is-open");
+      toggle?.classList.remove("is-open");
+      toggle?.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
+/* ============================================================
+   INLINE CONTACT FORM VALIDATION
+   Adds real-time feedback as the visitor types/tabs through the
+   form — purely additive, doesn't touch the existing submit
+   handler or its validation logic at all.
+============================================================ */
+function setupInlineFormValidation() {
+  const form = document.getElementById("contactForm");
+  if (!form) return;
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const fields = ["name", "email", "subject", "message"];
+
+  fields.forEach((id) => {
+    const field = form.querySelector(`#${id}`);
+    if (!field) return;
+    field.addEventListener("blur", () => {
+      const value = field.value.trim();
+      const isValid = id === "email" ? emailPattern.test(value) : value.length > 0;
+      field.classList.toggle("field-invalid", value.length > 0 && !isValid);
+    });
+    field.addEventListener("input", () => {
+      if (field.classList.contains("field-invalid")) {
+        field.classList.remove("field-invalid");
+      }
+    });
+  });
+}
+
+/* ============================================================
+   LAZY FADE-IN FOR IMAGES
+============================================================ */
+function setupImageFadeIn() {
+  const images = document.querySelectorAll("img");
+  if (!images.length) return;
+
+  images.forEach((img) => img.classList.add("img-fade"));
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("img-fade-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+  images.forEach((img) => {
+    if (img.complete) {
+      img.classList.add("img-fade-visible"); // already loaded (e.g. from cache) — just show it
+    } else {
+      observer.observe(img);
+    }
+  });
+}
+
+/* ============================================================
+   INIT — original startup sequence (unchanged in effect: same
+   functions, same order — now wrapped in safeRun so that if any
+   one of them throws, the rest still run instead of the whole
+   page silently breaking, as previously happened).
 ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
-  setupIntro();
-  loadContent();
-  setupNav();
-  setupScrollReveal();
-  setupCursor();
-  setupContactForm();
-  setupFooterYear();
+  safeRun(setupIntro, "setupIntro");
+  safeRun(loadContent, "loadContent");
+  safeRun(setupNav, "setupNav");
+  safeRun(setupScrollReveal, "setupScrollReveal");
+  safeRun(setupCursor, "setupCursor");
+  safeRun(setupContactForm, "setupContactForm");
+  safeRun(setupFooterYear, "setupFooterYear");
+});
+
+/* ============================================================
+   INIT — additional features, running alongside the original
+   startup sequence above.
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  safeRun(setupNetworkStatus, "setupNetworkStatus");
+  safeRun(setupBackToTop, "setupBackToTop");
+  safeRun(setupScrollProgress, "setupScrollProgress");
+  safeRun(setupCopyToClipboard, "setupCopyToClipboard");
+  safeRun(setupEscapeCloses, "setupEscapeCloses");
+  safeRun(setupInlineFormValidation, "setupInlineFormValidation");
+  safeRun(setupImageFadeIn, "setupImageFadeIn");
 });
