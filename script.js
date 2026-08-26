@@ -30,10 +30,11 @@ const DEFAULT_SKILLS = [
     ],
   },
   {
-    category: "Frameworks",
+    category: "Frameworks & Libraries",
     items: [
-      { name: "Spring Boot", desc: "Building scalable backend applications." },
-      { name: "JPA/Hibernate", desc: "Object-relational mapping for Java applications." },
+      { name: "Express.js", desc: " A minimalist web application framework built on Node.js to simplify routing, middleware integration, and API development." },
+      { name: "node.js", desc: "Server-side JavaScript runtime for building scalable applications." },
+      { name: "React.js", desc: "Building dynamic user interfaces with reusable components." },
     ],
   },
   {
@@ -52,21 +53,18 @@ const DEFAULT_SKILLS = [
       { name: "Git & GitHub", desc: "Version control and collaboration." },
       { name: "Docker", desc: "Containerization for consistent environments." },
       { name: "Postman", desc: "API testing and development." },
-      { name: "VS Code", desc: "Code editor for development." },
-      { name: "claude.ai", desc: "AI-powered coding assistant." },
-      { name: "AI TOOLS", desc: "Leveraging AI for development and problem-solving." },
+      { name: "npm", desc: "Node.js package manager for development." },
     ],
   },
   { 
     category: "Other Skills & Core",
     items: [
-      { name: "REST API Development", desc: "Designing and implementing RESTful APIs." },
-      { name: "Database Design", desc: "Structuring databases for efficiency and scalability." },
-      {name : "DSA", desc: "Understanding data structures and algorithms for efficient coding."},
-      {name : "OOP", desc: "Applying object-oriented programming principles."},
+      { name: "REST API", desc: "Designing and implementing RESTful APIs." },
+      { name: "System Design", desc: "Structuring systems for efficiency and scalability." },
+      { name : "DSA", desc: "Understanding data structures and algorithms for efficient coding."},
+      { name : "OOP", desc: "Applying object-oriented programming principles."},
       { name: "DBMS", desc: "Database management systems for data storage and retrieval." },
-      { name: "Problem Solving", desc: "Analyzing and solving complex problems." },
-      { name: "Team Collaboration", desc: "Working effectively in team environments." },
+      { name: "Deployment", desc: "Deploying and managing applications in production environments." },
     ],
   }
 ];
