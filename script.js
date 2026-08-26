@@ -6,8 +6,8 @@
    design (the SQL schema locks it to read-only via Row Level Security).
    Never put your "service_role" key here — that one is truly secret.
 ============================================================ */
-const SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co"; // EDIT ME
-const SUPABASE_ANON_KEY = "YOUR-ANON-PUBLIC-KEY"; // EDIT ME
+const SUPABASE_URL = "https://rzzdbcbolhocklhzcnpl.supabase.co"; // EDIT ME
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6emRiY2JvbGhvY2tsaHpjbnBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2MzU1NjQsImV4cCI6MjEwMzIxMTU2NH0.i521TNqL9Em9Fc6WrLxAy8zScQX7T4DtLmRxT_Lhv9U"; // EDIT ME
 
 /* ============================================================
    CONTENT DATA — FALLBACK DEFAULTS
