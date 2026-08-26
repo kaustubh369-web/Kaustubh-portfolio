@@ -62,11 +62,11 @@ const DEFAULT_SKILLS = [
     items: [
       { name: "REST API Development", desc: "Designing and implementing RESTful APIs." },
       { name: "Database Design", desc: "Structuring databases for efficiency and scalability." },
-      { name : "DSA", desc: "Understanding data structures and algorithms for efficient coding."},
-      { name : "OOP", desc: "Applying object-oriented programming principles."},
+      {name : "DSA", desc: "Understanding data structures and algorithms for efficient coding."},
+      {name : "OOP", desc: "Applying object-oriented programming principles."},
       { name: "DBMS", desc: "Database management systems for data storage and retrieval." },
       { name: "Problem Solving", desc: "Analyzing and solving complex problems." },
-      
+      { name: "Team Collaboration", desc: "Working effectively in team environments." },
     ],
   }
 ];
