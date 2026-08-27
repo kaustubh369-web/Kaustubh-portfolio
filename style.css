@@ -107,10 +107,62 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   opacity: 0;
   pointer-events: none;
 }
-.intro__video {
-  width: 100%;
+.intro__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.intro__greeting {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  min-height: 1.2em;
+}
+.intro__greeting--pulse {
+  animation: introGreetingPulse 0.5s var(--ease);
+}
+@keyframes introGreetingPulse {
+  0%   { opacity: 0; transform: translateY(10px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.intro__counter {
+  display: flex;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+.intro__percent {
+  font-size: clamp(2.6rem, 8vw, 4.5rem);
+  font-weight: 500;
+  color: var(--text-primary);
+  min-width: 2.4ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.intro__percent-sign {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  margin-left: 4px;
+  color: var(--text-secondary);
+}
+
+.intro__bar {
+  width: min(280px, 60vw);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.intro__bar-fill {
   height: 100%;
-  object-fit: cover;
+  width: 0%;
+  background: var(--accent-gradient);
+  border-radius: 999px;
+  transition: width 0.1s linear;
 }
 .intro__skip {
   position: absolute;

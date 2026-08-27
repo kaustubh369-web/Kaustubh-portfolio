@@ -201,19 +201,27 @@ function renderProjects(projectList) {
 }
 
 /* ============================================================
-   INTRO SPLASH
+   INTRO SPLASH — 0-100% loading counter, cycling "hello" through
+   7 languages as it counts up, then reveals the site.
 ============================================================ */
 function setupIntro() {
   const intro = document.getElementById("intro");
-  const video = document.getElementById("introVideo");
+  const percentEl = document.getElementById("introPercent");
+  const greetingEl = document.getElementById("introGreeting");
+  const barFill = document.getElementById("introBarFill");
   const skipBtn = document.getElementById("introSkip");
-  if (!intro || !video) return;
+  if (!intro || !percentEl || !greetingEl) return;
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (prefersReducedMotion) {
-    intro.remove();
-    return;
-  }
+  // Word order also sets the language-cycle order below.
+  const GREETINGS = [
+    "Hello",       // English
+    "नमस्ते",       // Hindi
+    "Bonjour",     // French
+    "こんにちは",   // Japanese
+    "¡Hola!",      // Spanish
+    "Hallo",       // German
+    "¿Qué tal?",   // Mexican Spanish
+  ];
 
   document.body.classList.add("intro-active");
 
@@ -226,13 +234,52 @@ function setupIntro() {
     setTimeout(() => intro.remove(), 700); // matches the CSS fade duration
   }
 
-  video.addEventListener("ended", dismiss);
-  // safety net: if the video can't load/play for any reason, don't trap
-  // the visitor on a blank screen — show the site after a short wait
-  video.addEventListener("error", dismiss);
-  setTimeout(dismiss, 5000);
-
   skipBtn.addEventListener("click", dismiss);
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) {
+    // Respect the preference: show the finished state briefly rather
+    // than animating, then reveal the site.
+    percentEl.textContent = "100";
+    if (barFill) barFill.style.width = "100%";
+    setTimeout(dismiss, 400);
+    return;
+  }
+
+  const DURATION_MS = 3200; // total loading-animation length
+  const startTime = performance.now();
+
+  function frame(now) {
+    if (dismissed) return;
+    const progress = Math.min((now - startTime) / DURATION_MS, 1);
+    const percent = Math.floor(progress * 100);
+
+    percentEl.textContent = percent;
+    if (barFill) barFill.style.width = `${percent}%`;
+
+    const langIndex = Math.min(
+      Math.floor(progress * GREETINGS.length),
+      GREETINGS.length - 1
+    );
+    if (greetingEl.dataset.index !== String(langIndex)) {
+      greetingEl.dataset.index = String(langIndex);
+      greetingEl.textContent = GREETINGS[langIndex];
+      // restart the CSS pulse animation on every language change
+      greetingEl.classList.remove("intro__greeting--pulse");
+      void greetingEl.offsetWidth;
+      greetingEl.classList.add("intro__greeting--pulse");
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      setTimeout(dismiss, 400); // brief pause at 100% before revealing
+    }
+  }
+  requestAnimationFrame(frame);
+
+  // safety net: never trap a visitor here no matter what
+  setTimeout(dismiss, DURATION_MS + 2000);
 }
 
 /* ============================================================
